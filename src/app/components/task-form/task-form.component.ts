@@ -29,11 +29,13 @@ export class TaskFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.taskId = Number(this.route.snapshot.paramMap.get('id'));
-    this.isEdit = !isNaN(this.taskId);
+    console.log('TaskFormComponent init');
+    const idParam = this.route.snapshot.paramMap.get('id');
+    this.isEdit = idParam !== null;
+    this.taskId = this.isEdit ? Number(idParam) : undefined;
 
-    if (this.isEdit) {
-      this.taskService.getTask(this.taskId!).subscribe({
+    if (this.isEdit && this.taskId !== undefined && !isNaN(this.taskId)) {
+      this.taskService.getTask(this.taskId).subscribe({
         next: (task) => this.taskForm.patchValue(task),
         error: () => this.router.navigate(['/'])
       });

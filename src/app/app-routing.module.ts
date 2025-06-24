@@ -6,8 +6,7 @@ import { TaskFormComponent } from './components/task-form/task-form.component';
 const routes: Routes = [
   { path: '', component: TaskListComponent },
   { path: 'ajouter', component: TaskFormComponent },
-  { path: 'modifier/:id', component: TaskFormComponent },
-  { path: '**', redirectTo: '' } // fallback vers la liste
+  { path: 'modifier/:id', component: TaskFormComponent }
 ];
 
 @NgModule({

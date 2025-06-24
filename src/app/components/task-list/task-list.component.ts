@@ -22,6 +22,7 @@ export class TaskListComponent implements OnInit {
   constructor(private taskService: TaskService) {}
 
   ngOnInit(): void {
+    console.log('TaskListComponent chargé');
     this.fetchTasks();
   }
 
