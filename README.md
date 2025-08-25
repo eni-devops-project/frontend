@@ -129,3 +129,11 @@ src/
 - [Documentation Angular](https://angular.io/docs)
 - [Angular CLI cheatsheet](https://angular.io/cli)
 - [Angular Material](https://material.angular.io/components/categories)
+
+## Conteneurisation
+
+Pour créer le conteneur associé au projet depuis le Dockerfile
+
+- Se placer à la racine du projet
+- Executer `podman build -t frontend .`
+- Pour tester `podman run -p 8080:80 localhost/frontend:latest`
