@@ -1,9 +1,8 @@
 name: Publish container image
 
 on:
-  push:
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+  release:
+    types: [published]
 
 jobs:
   docker:
@@ -22,10 +21,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/eni-devops-project/frontend:$GITHUB_REF_NAME .
-          docker tag ghcr.io/eni-devops-project/frontend:$GITHUB_REF_NAME ghcr.io/eni-devops-project/frontend:latest
+          docker build -t ghcr.io/eni-devops-project/frontend:${{ github.event.release.tag_name }} .
+          docker tag ghcr.io/eni-devops-project/frontend:${{ github.event.release.tag_name }} ghcr.io/eni-devops-project/frontend:latest
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/eni-devops-project/frontend:$GITHUB_REF_NAME
+          docker push ghcr.io/eni-devops-project/frontend:${{ github.event.release.tag_name }}
           docker push ghcr.io/eni-devops-project/frontend:latest
