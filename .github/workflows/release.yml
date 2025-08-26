@@ -27,12 +27,9 @@ jobs:
         run: npm ci
 
       - name: Semantic Release
-        id: tag-creation
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          TAG=$(npx semantic-release --ci --no-ci | tee release.log | grep "The next release version is" | awk '{print $6}')
-          echo "RELEASE_TAG=$TAG" >> $GITHUB_ENV
+        run: npx semantic-release
 
   publish-image:
     needs: semantic-versionning
@@ -40,6 +37,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
 
       - name: Log in to gcr.io
         uses: docker/login-action@v3
@@ -48,12 +49,19 @@ jobs:
           username: ${{ vars.GCR_USERNAME }}
           password: ${{ secrets.GH_TOKEN }}
 
+      - name: Get latest tag
+        id: get-tag
+        run: |
+          TAG=$(git describe --tags --abbrev=0)
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
+
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/eni-devops-project/frontend:${{ needs.semantic-versionning.outputs.RELEASE_TAG }} .
-          docker tag ghcr.io/eni-devops-project/frontend:${{ needs.semantic-versionning.outputs.RELEASE_TAG }} ghcr.io/eni-devops-project/frontend:latest
+          docker build -t ghcr.io/eni-devops-project/frontend:${TAG} .
+          docker tag ghcr.io/eni-devops-project/frontend:${TAG} ghcr.io/eni-devops-project/frontend:latest
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/eni-devops-project/frontend:${{ needs.semantic-versionning.outputs.RELEASE_TAG }}
+          docker push ghcr.io/eni-devops-project/frontend:${TAG}
           docker push ghcr.io/eni-devops-project/frontend:latest
