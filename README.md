@@ -135,5 +135,6 @@ src/
 Pour créer le conteneur associé au projet depuis le Dockerfile
 
 - Se placer à la racine du projet
+- se login au dépôt github
 - Executer `podman build -t frontend .`
 - Pour tester `podman run -p 8080:80 localhost/frontend:latest`
