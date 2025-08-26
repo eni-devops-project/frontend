@@ -2,7 +2,7 @@ name: Publish container image
 
 on:
   release:
-    types: [published]
+    types: [created]
 
 jobs:
   docker:
