@@ -50,10 +50,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/eni-devops-project/frontend:${{ steps.tag-creation.outputs.RELEASE_TAG }} .
-          docker tag ghcr.io/eni-devops-project/frontend:${{ steps.tag-creation.outputs.RELEASE_TAG }} ghcr.io/eni-devops-project/frontend:latest
+          docker build -t ghcr.io/eni-devops-project/frontend:${{ needs.semantic-versionning.outputs.RELEASE_TAG }} .
+          docker tag ghcr.io/eni-devops-project/frontend:${{ needs.semantic-versionning.outputs.RELEASE_TAG }} ghcr.io/eni-devops-project/frontend:latest
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/eni-devops-project/frontend:${{ steps.tag-creation.outputs.RELEASE_TAG }}
+          docker push ghcr.io/eni-devops-project/frontend:${{ needs.semantic-versionning.outputs.RELEASE_TAG }}
           docker push ghcr.io/eni-devops-project/frontend:latest
